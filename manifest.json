@@ -1,0 +1,41 @@
+{
+    "manifest_version": 3,
+    "name": "FlowRunner",
+    "version": "1.0.0",
+    "description": "浏览器自动化任务管理器 - 导入 Chrome Recorder 录制，自动执行任意网页操作流程",
+    "icons": {
+        "16": "assets/icons/icon16.png",
+        "48": "assets/icons/icon48.png",
+        "128": "assets/icons/icon128.png"
+    },
+    "action": {
+        "default_popup": "src/popup/index.html",
+        "default_icon": {
+            "16": "assets/icons/icon16.png",
+            "48": "assets/icons/icon48.png"
+        },
+        "default_title": "FlowRunner - 自动化任务管理器"
+    },
+    "background": {
+        "service_worker": "src/background/service-worker.js",
+        "type": "module"
+    },
+    "permissions": [
+        "storage",
+        "alarms",
+        "tabs",
+        "activeTab",
+        "scripting",
+        "notifications"
+    ],
+    "host_permissions": [
+        "<all_urls>"
+    ],
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["src/content/executor.js"],
+            "run_at": "document_idle"
+        }
+    ]
+}

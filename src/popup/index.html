@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=400, initial-scale=1.0">
+        <title>FlowRunner - 自动化任务管理器</title>
+        <link rel="stylesheet" href="popup.css">
+    </head>
+    <body>
+        <div class="app">
+            <!-- 头部 -->
+            <header class="header">
+                <div class="header-title">
+                    <span class="logo">▶️</span>
+                    <h1>FlowRunner</h1>
+                </div>
+                <p class="header-subtitle">浏览器自动化任务管理器</p>
+            </header>
+
+            <!-- 操作栏 -->
+            <div class="toolbar">
+                <button id="btn-import" class="btn btn-primary">
+                    <span class="btn-icon">📥</span>
+                    导入录制
+                </button>
+                <button
+                    id="btn-refresh"
+                    class="btn btn-secondary"
+                    title="刷新列表"
+                >
+                    <span class="btn-icon">🔄</span>
+                </button>
+            </div>
+
+            <!-- 隐藏的文件输入 -->
+            <input
+                type="file"
+                id="file-input"
+                accept=".json"
+                style="display: none"
+            >
+
+            <!-- 任务列表 -->
+            <div class="task-list-container">
+                <div id="task-list" class="task-list">
+                    <!-- 任务项由 JS 动态渲染 -->
+                </div>
+
+                <!-- 空状态 -->
+                <div id="empty-state" class="empty-state">
+                    <div class="empty-icon">📋</div>
+                    <p class="empty-title">暂无自动化任务</p>
+                    <p class="empty-desc">点击上方「导入录制」按钮添加任务</p>
+                </div>
+            </div>
+
+            <!-- 状态栏 -->
+            <footer class="footer">
+                <span id="status-text">就绪</span>
+            </footer>
+        </div>
+
+        <!-- 任务详情弹窗 -->
+        <div id="modal-overlay" class="modal-overlay hidden">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2 id="modal-title">任务详情</h2>
+                    <button id="modal-close" class="modal-close">
+                        &times;
+                    </button>
+                </div>
+                <div id="modal-content" class="modal-content">
+                    <!-- 动态内容 -->
+                </div>
+                <div class="modal-footer">
+                    <button id="modal-cancel" class="btn btn-secondary">
+                        取消
+                    </button>
+                    <button id="modal-confirm" class="btn btn-primary">
+                        确认
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <script src="popup.js" type="module"></script>
+    </body>
+</html>

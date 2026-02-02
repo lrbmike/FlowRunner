@@ -1,0 +1,26 @@
+{
+  "title": "示例签到任务",
+  "steps": [
+    {
+      "type": "navigate",
+      "url": "https://example.com/login"
+    },
+    {
+      "type": "click",
+      "selectors": [
+        ["#sign-in-btn"],
+        ["[data-testid='signin']"],
+        ["xpath///*[@id='sign-in-btn']"]
+      ],
+      "offsetX": 50,
+      "offsetY": 15
+    },
+    {
+      "type": "waitForElement",
+      "selectors": [
+        [".success-message"]
+      ],
+      "timeout": 5000
+    }
+  ]
+}
