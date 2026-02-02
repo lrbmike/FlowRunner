@@ -241,6 +241,13 @@ function showImportConfirm(task) {
       <label class="form-label">步骤数量</label>
       <div style="color: var(--text-secondary);">${task.steps.length} 个步骤</div>
     </div>
+    <div class="form-group">
+      <label class="form-label">错误处理</label>
+      <select class="form-input" id="import-error-policy">
+        <option value="stop" selected>遇到错误停止 (默认)</option>
+        <option value="continue">忽略错误继续执行</option>
+      </select>
+    </div>
   `;
   
   elements.modalConfirm.textContent = '导入';
@@ -253,6 +260,12 @@ async function saveTask(task) {
     const nameInput = document.getElementById('import-name');
     if (nameInput) {
       task.name = nameInput.value || task.name;
+    }
+
+    // 获取错误策略
+    const errorPolicyInput = document.getElementById('import-error-policy');
+    if (errorPolicyInput) {
+      task.errorPolicy = errorPolicyInput.value || 'stop';
     }
     
     updateStatus('正在保存...');

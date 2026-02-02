@@ -214,6 +214,13 @@ chrome.runtime.onInstalled.addListener((details) => {
   
   // 初始化存储
   storage.initialize();
+
+  // 配置点击图标打开侧边栏
+  // 注意：需要 Chrome 114+
+  if (chrome.sidePanel && chrome.sidePanel.setPanelBehavior) {
+    chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
+      .catch((error) => console.error(error));
+  }
 });
 
 console.log('[ServiceWorker] FlowRunner Service Worker loaded');
