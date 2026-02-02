@@ -33,7 +33,7 @@
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.type === MessageType.EXECUTE_STEPS) {
       console.log('[Executor] Received execute command');
-      executeSteps(message.steps, message.taskId, message.taskName, message.errorPolicy)
+      executeSteps(message.steps, message.taskId, message.taskName, message.errorPolicy, message.stepTimeout, message.randomDelay)
         .then(result => sendResponse(result))
         .catch(error => sendResponse({ 
           success: false, 
@@ -46,13 +46,16 @@
   /**
    * 执行步骤序列
    */
-  async function executeSteps(steps, taskId, taskName, errorPolicy = 'stop') {
+  async function executeSteps(steps, taskId, taskName, errorPolicy = 'stop', stepTimeout = 10000, randomDelay = false) {
+    // 更新超时配置
+    Config.elementTimeout = stepTimeout;
+    
     const startTime = Date.now();
     let completedSteps = 0;
     let lastError = null;
     let hasFailedSteps = false;
 
-    console.log(`[Executor] Starting execution of ${steps.length} steps. Policy: ${errorPolicy}`);
+    console.log(`[Executor] Starting execution of ${steps.length} steps. Policy: ${errorPolicy}, Timeout: ${stepTimeout}, RandomDelay: ${randomDelay}`);
 
     try {
       for (let i = 0; i < steps.length; i++) {
@@ -65,7 +68,13 @@
           
           // 步骤间延迟
           if (i < steps.length - 1) {
-            await delay(Config.stepDelay);
+            if (randomDelay) {
+              // 随机延迟 800ms - 2000ms
+              const delayTime = Math.floor(Math.random() * (2000 - 800 + 1)) + 800;
+              await delay(delayTime);
+            } else {
+              await delay(Config.stepDelay);
+            }
           }
         } catch (error) {
           if (errorPolicy === 'continue') {

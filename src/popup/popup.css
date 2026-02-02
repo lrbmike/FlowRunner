@@ -270,13 +270,25 @@ body {
 }
 
 .status-badge.failed {
-  background: #fef2f2;
-  color: #dc2626;
+  background: #fef2f2; /* Red 50 */
+  color: #dc2626;      /* Red 600 */
+}
+
+.status-badge.running {
+  background: #eff6ff; /* Blue 50 */
+  color: #2563eb;      /* Blue 600 */
+  animation: pulse 2s infinite;
 }
 
 .status-badge.pending {
-  background: #f4f4f5;
-  color: #71717a;
+  background: #f4f4f5; /* Zinc 100 */
+  color: #71717a;      /* Zinc 500 */
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
 }
 
 .task-meta {

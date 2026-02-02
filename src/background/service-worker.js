@@ -89,7 +89,9 @@ async function executeTask(taskId) {
       steps: task.steps,
       taskId: task.id,
       taskName: task.name,
-      errorPolicy: task.errorPolicy || 'stop'
+      errorPolicy: task.errorPolicy || 'stop',
+      stepTimeout: task.timeout || 5000,
+      randomDelay: task.randomDelay || false
     });
     
     return response;

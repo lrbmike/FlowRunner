@@ -166,6 +166,8 @@ function renderStatusBadge(status) {
       return '<span class="status-badge failed">✗ 失败</span>';
     case 'partial':
       return '<span class="status-badge failed">⚠ 部分完成</span>';
+    case 'running':
+      return '<span class="status-badge running">⏳ 执行中</span>';
     default:
       return '<span class="status-badge pending">待执行</span>';
   }
@@ -242,6 +244,19 @@ function showImportConfirm(task) {
       <div style="color: var(--text-secondary);">${task.steps.length} 个步骤</div>
     </div>
     <div class="form-group">
+      <label class="form-label">超时时间 (毫秒)</label>
+      <input type="number" class="form-input" id="import-timeout" value="3000" min="1000" step="500">
+    </div>
+    <div class="form-group">
+      <label class="form-label" style="display: flex; align-items: center; justify-content: space-between;">
+        <span>拟人化延迟 (0.8s-2s)</span>
+        <label class="switch">
+          <input type="checkbox" id="import-random-delay" checked>
+          <span class="switch-slider"></span>
+        </label>
+      </label>
+    </div>
+    <div class="form-group">
       <label class="form-label">错误处理</label>
       <select class="form-input" id="import-error-policy">
         <option value="stop" selected>遇到错误停止 (默认)</option>
@@ -267,6 +282,18 @@ async function saveTask(task) {
     if (errorPolicyInput) {
       task.errorPolicy = errorPolicyInput.value || 'stop';
     }
+
+    // 获取超时时间
+    const timeoutInput = document.getElementById('import-timeout');
+    if (timeoutInput) {
+      task.timeout = parseInt(timeoutInput.value, 10) || 5000;
+    }
+
+    // 获取拟人化延迟配置
+    const randomDelayInput = document.getElementById('import-random-delay');
+    if (randomDelayInput) {
+      task.randomDelay = randomDelayInput.checked;
+    }
     
     updateStatus('正在保存...');
     
@@ -288,6 +315,21 @@ async function saveTask(task) {
 
 // 执行任务
 async function executeTask(taskId) {
+  const taskCard = document.querySelector(`.task-card[data-task-id="${taskId}"]`);
+  const btnExecute = taskCard?.querySelector('.btn-action-execute');
+  const statusBadge = taskCard?.querySelector('.task-status');
+  
+  if (taskCard) {
+    // 立即更新 UI 为运行中状态
+    if (btnExecute) {
+      btnExecute.disabled = true;
+      btnExecute.innerHTML = '⏳ 运行中...';
+    }
+    if (statusBadge) {
+      statusBadge.innerHTML = renderStatusBadge('running');
+    }
+  }
+
   try {
     updateStatus('正在执行...');
     
@@ -302,12 +344,19 @@ async function executeTask(taskId) {
       updateStatus('执行失败: ' + (response.error || '未知错误'));
     }
     
-    // 刷新列表以更新状态
-    setTimeout(loadTasks, 1000);
+    // 稍微延迟后刷新列表，以便用户看清结果
+    setTimeout(loadTasks, 500);
     
   } catch (error) {
     console.error('[Popup] Execute error:', error);
     updateStatus('执行失败');
+    
+    // 发生错误时恢复按钮状态
+    if (btnExecute) {
+      btnExecute.disabled = false;
+      btnExecute.innerHTML = '▶️ 执行';
+    }
+    loadTasks();
   }
 };
 
@@ -347,6 +396,19 @@ function showTaskDetail(taskId) {
           </div>
         `).join('')}
       </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">超时时间 (毫秒)</label>
+      <input type="number" class="form-input" id="detail-timeout" value="${task.timeout || 5000}" min="1000" step="500">
+    </div>
+    <div class="form-group">
+      <label class="form-label" style="display: flex; align-items: center; justify-content: space-between;">
+        <span>拟人化延迟 (0.8s-2s)</span>
+        <label class="switch">
+          <input type="checkbox" id="detail-random-delay" ${task.randomDelay ? 'checked' : ''}>
+          <span class="switch-slider"></span>
+        </label>
+      </label>
     </div>
     <div class="form-group">
       <label class="form-label">错误处理</label>
@@ -389,6 +451,8 @@ async function updateTaskFromDetail(taskId) {
   try {
     const name = document.getElementById('detail-name')?.value;
     const errorPolicy = document.getElementById('detail-error-policy')?.value;
+    const timeout = parseInt(document.getElementById('detail-timeout')?.value, 10) || 5000;
+    const randomDelay = document.getElementById('detail-random-delay')?.checked;
     const scheduleEnabled = document.getElementById('detail-schedule')?.checked;
     const scheduleTime = document.getElementById('detail-time')?.value;
     
@@ -398,6 +462,8 @@ async function updateTaskFromDetail(taskId) {
       updates: {
         name,
         errorPolicy,
+        timeout,
+        randomDelay,
         schedule: {
           enabled: scheduleEnabled,
           time: scheduleTime,

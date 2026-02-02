@@ -1,0 +1,119 @@
+{
+    "title": "example01",
+    "steps": [
+        {
+            "type": "setViewport",
+            "width": 1317,
+            "height": 886,
+            "deviceScaleFactor": 1,
+            "isMobile": false,
+            "hasTouch": false,
+            "isLandscape": false
+        },
+        {
+            "type": "navigate",
+            "url": "https://github.com/",
+            "assertedEvents": [
+                {
+                    "type": "navigation",
+                    "url": "https://github.com/",
+                    "title": "GitHub"
+                }
+            ]
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "div.position-relative span.prc-Button-Label-FWkx3"
+                ],
+                [
+                    "xpath///*[@data-testid=\"top-nav-center\"]/div[1]/div[1]/button/span/span[2]"
+                ],
+                [
+                    "pierce/div.position-relative span.prc-Button-Label-FWkx3"
+                ]
+            ],
+            "offsetY": 8,
+            "offsetX": 60
+        },
+        {
+            "type": "change",
+            "value": "lrbmike/FlowRunner",
+            "selectors": [
+                [
+                    "aria/Search"
+                ],
+                [
+                    "react-partial:nth-of-type(2) div.search-input-container > div input"
+                ],
+                [
+                    "xpath///*[@id=\"query-builder-test\"]"
+                ],
+                [
+                    "pierce/react-partial:nth-of-type(2) div.search-input-container > div input"
+                ]
+            ],
+            "target": "main"
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "div.position-relative > ul > li:nth-of-type(1) span.ActionListItem-descriptionWrap > span"
+                ],
+                [
+                    "xpath///*[@id=\"query-builder-test-result-0\"]/span/span[2]/span"
+                ],
+                [
+                    "pierce/div.position-relative > ul > li:nth-of-type(1) span.ActionListItem-descriptionWrap > span"
+                ]
+            ],
+            "offsetY": 11,
+            "offsetX": 199,
+            "assertedEvents": [
+                {
+                    "type": "navigation",
+                    "url": "https://github.com/search?q=lrbmike%2FFlowRunner&type=repositories",
+                    "title": ""
+                }
+            ]
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "em:nth-of-type(2)"
+                ],
+                [
+                    "xpath///*[@data-testid=\"results-list\"]/div/div/div[1]/h3/div/div[2]/a/span/em[2]"
+                ],
+                [
+                    "pierce/em:nth-of-type(2)"
+                ]
+            ],
+            "offsetY": 8,
+            "offsetX": 46.953125
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "#repository-container-header > div.d-flex div.unstarred > form svg"
+                ],
+                [
+                    "xpath///*[@id=\"repository-details-container\"]/ul/li[4]/div/div[2]/form/button/svg"
+                ],
+                [
+                    "pierce/#repository-container-header > div.d-flex div.unstarred > form svg"
+                ]
+            ],
+            "offsetY": 8,
+            "offsetX": 8
+        }
+    ]
+}
